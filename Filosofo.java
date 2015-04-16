@@ -1,63 +1,98 @@
-import java.util.Scanner;
 import java.util.Random;
 
-
-
 /**
- *
- * @author Beto,Roberto,Manuel
- */
-public class Mesa 
-{
  
-    public boolean[] tenedoresLibres = new boolean[5];
-    int n= 5; //numeros de tenedores/filosofos
+ * @author Beto, RoBerto, MaNuel
+ */
+public class Filosofo  extends Thread
+{
+    Mesa lamesa;
+    int numeroF;
     
-    public Mesa(int k)
-    {
-        int val = 1;
-        n=k;
-        tenedoresLibres = new boolean[n];
-        for(int j=0;j<n; j++)
-	{
-            tenedoresLibres[j] = true;
-            
-	}
-        
-    }
+    int tenedorIzq;
+    int tenedorDer;
     
-   
+    char accion;  // comer, pensar, hambre
+    Random r = new Random();
+    int a,x;
+    int numero;
     
     
-	
-    public static void main(String[] args)
-    {
-        int numeros;
-        int opcion;
-        int p1=0,c1=0,c2=0;
-        Mesa laMesa;
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Dame el numero de filosofos(5): ");
-        numeros = sc.nextInt();
-        laMesa = new Mesa(5);
+   public Filosofo(Mesa m, int j,int tiempo)
+   {
+       lamesa=m;
+       numeroF = j;
+       tenedorIzq = j-1;
+       if(j==lamesa.n){ tenedorDer = 0;}
+       else{tenedorDer = j;}
+       
+       accion = 'p';
+       x=tiempo;
       
+   }
+   
+   public void run()
+   {
+       while(true)
+       {
+           boolean suyoIzq = false;
+           boolean suyoDer= false;
+           
+           while(accion == 'p')
+           {
+               System.out.println("Filosofo "+ numeroF + " Piensa");
+               a = r.nextInt(x);
+               try
+               {
+                   Thread.sleep(a);
+               }
+               catch(Exception e){}
+               
+               accion = 'h';
+               System.out.println("Filosofo "+ numeroF + " Tiene hambre");
+           }
+           while(accion == 'h')
+           {
+               
+               if((lamesa.tenedoresLibres[tenedorDer]))
+               {
+                   lamesa.tenedoresLibres[tenedorDer] = false;
+                   suyoDer = true;
+                   System.out.println("Filosofo "+ numeroF + " toma su tenedor derecho "+tenedorDer);
+                   
+               }
+               if((lamesa.tenedoresLibres[tenedorIzq])&& !lamesa.tenedoresLibres[tenedorDer]&& suyoDer)
+               {
+                   lamesa.tenedoresLibres[tenedorIzq] = false;
+                   suyoIzq = true;
+                   System.out.println("Filosofo "+ numeroF + " toma su tenedor Izq "+tenedorIzq);
+               }
+               
+               if(!lamesa.tenedoresLibres[tenedorIzq]&& !lamesa.tenedoresLibres[tenedorDer]&& suyoDer && suyoIzq)
+               {  accion = 'c';
+                    
+               }
+           }
+           while(accion == 'c')
+           {
+               System.out.println("Fioisofo "+ numeroF + " Come-----------------------------------------------");
+               a = r.nextInt(x);
+               try
+               {
+                   Thread.sleep(a);
+               }
+               catch(Exception e){}
+               accion = 'p';
+               lamesa.tenedoresLibres[tenedorIzq] = true;
+               lamesa.tenedoresLibres[tenedorDer] = true;
+               
+               
+           }
+           
+           
+       }
+       
+   }
             
-        
-        
-        Filosofo a = new Filosofo(laMesa,1,10);
-        Filosofo b = new Filosofo(laMesa,2,10);
-        Filosofo c = new Filosofo(laMesa,3,10);
-        Filosofo d = new Filosofo(laMesa,4,10);
-        Filosofo e = new Filosofo(laMesa,5,10);
-        
-        
-        a.start();
-        b.start();
-        c.start();
-        d.start();
-        e.start();
-        
-        
-    }
-    
 }
+

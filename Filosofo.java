@@ -46,7 +46,7 @@ public class Filosofo  extends Thread
                {
                    Thread.sleep(a);
                }
-               catch(Exception e){}
+               catch(Exception e){e.printStackTrace();}
                
                accion = 'h';
                System.out.println("Filosofo "+ numeroF + " Tiene hambre");
@@ -81,7 +81,7 @@ public class Filosofo  extends Thread
                {
                    Thread.sleep(a);
                }
-               catch(Exception e){}
+               catch(Exception e){e.printStackTrace();}
                accion = 'p';
                lamesa.tenedoresLibres[tenedorIzq] = true;
                lamesa.tenedoresLibres[tenedorDer] = true;

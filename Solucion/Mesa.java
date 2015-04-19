@@ -8,7 +8,8 @@ import static java.lang.Thread.*;
  */
 public class Mesa {
 
-    Asiento cabeza = null;
+    static Asiento cabeza = null;
+    static Filosofo puedeComer = null;
 
     public Mesa(int tam) {
         Asiento temp = new Asiento(); //Sector temporal
@@ -30,12 +31,31 @@ public class Mesa {
         temp.setDerecha(cabeza);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Mesa laMesa = new Mesa(5);
         Asiento temporal = laMesa.cabeza;
         for(int x = 0; x<5; x++) {
             temporal.ocupador.start();
             temporal = temporal.getDerecha();
+        }
+        turnador(cabeza);
+    }
+
+    public static boolean moderador(Filosofo temp) throws InterruptedException {
+        while(temp != puedeComer) {
+            temp.wait(10);
+        }
+        temp.notify();
+        return true;
+    }
+
+    public synchronized static void turnador(Asiento asiento) throws  InterruptedException{
+
+        while(true){
+            puedeComer=asiento.ocupador;
+            Thread.sleep(11);   //El tiempo en que el turnador duerme debe ser mayor o igual
+                                //al tiempo en que los filofos comen...
+            asiento = asiento.getDerecha();
         }
     }
 }

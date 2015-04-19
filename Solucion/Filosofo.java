@@ -2,7 +2,7 @@ import java.util.Random;
 
 /**
  
- * @author Beto "El samaritano" Ortiz, RoBerto Cholula, José Manuel
+ * @author Beto "El samaritano" Ortiz, RoBerto Cholulaman, José Manuel
  */
 public class Filosofo  extends Thread {
 
@@ -11,9 +11,8 @@ public class Filosofo  extends Thread {
     String nombre;
     int starvationLVL;
     int id;
-    boolean turnoComer;
-    int timeMin = 1000;
-    int timeMax = 3000;
+    int timeMin = 0; //tiempo mínimo de aleatoriedad
+    int timeMax = 10; //tiempo máximo de aleatoriedad
 
 
     //---------------------Constructores--------------------//
@@ -80,39 +79,44 @@ public class Filosofo  extends Thread {
         pensar();
         System.out.println(nombre + (id) + ": tengo hambre");
         boolean tengohambre = true;
-        while(tengohambre) {
-            if(!derecho.isOcupado()) {
+        while (tengohambre) {
+            if (!derecho.isOcupado()&&Mesa.moderador(this)) {
                 derecho.setOcupador(id);
                 derecho.setOcupado(true);
                 System.out.println(nombre + (id) + ": tenedor derecho listo! " + derecho);
-                if(!izquierdo.isOcupado()) {
+                if (!izquierdo.isOcupado()) {
                     izquierdo.setOcupado(true);
                     izquierdo.setOcupador(id);
                     System.out.println(nombre + (id) + ": tenedor izquierdo listo, a comer! " + izquierdo);
                     comer();
-                    tengohambre=false;
+                    tengohambre = false;
                 }
-            } else if(derecho.getOcupador()==id) {
-                if(!izquierdo.isOcupado()) {
+            } else if (derecho.getOcupador() == id && Mesa.moderador(this)) {
+                if (!izquierdo.isOcupado()) {
                     izquierdo.setOcupado(true);
                     izquierdo.setOcupador(id);
                     System.out.println(nombre + (id) + ": tenedor izquierdo listo, a comer! " + izquierdo);
                     comer();
-                    tengohambre=false;
+                    tengohambre = false;
                 }
-
             } else {
                 isAlive();
-            }
+                if(derecho.ocupador==id) {
+                    derecho.setOcupador(-1);
+                    derecho.setOcupado(false);
+                }
+                if(izquierdo.ocupador==id) {
+                    izquierdo.setOcupador(-1);
+                    izquierdo.setOcupado(false);
+                }
 
+            }
         }
-        System.out.println(id + ": " + getState());
         hacerAlgo();
     }
 
     public void pensar() throws InterruptedException {
         System.out.println(nombre + (id) + ": estoy pensando...");
-        System.out.println(id + ": " + getState());
         sleep((int) (Math.random() * (timeMax - timeMin + 1) + timeMin));
     }
 
@@ -123,7 +127,6 @@ public class Filosofo  extends Thread {
         derecho.setOcupado(false);
         izquierdo.setOcupado(false);
         System.out.println(nombre + (id) + ": estoy satisfecho c:-------------------------------------------");
-        System.out.println(id + ": " + getState());
     }
 
 }

@@ -102,6 +102,7 @@ public class Filosofo  extends Thread {
                 }
 
             } else {
+                isAlive();
             }
 
         }

@@ -42,11 +42,11 @@ public class Mesa {
     }
 
     public static boolean moderador(Filosofo temp) throws InterruptedException {
-        while(temp != puedeComer) {
-            temp.wait(10);
+        if(puedeComer==temp){
+            return true;
+        } else {
+            return false;
         }
-        temp.notify();
-        return true;
     }
 
     public synchronized static void turnador(Asiento asiento) throws  InterruptedException{

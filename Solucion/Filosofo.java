@@ -112,7 +112,6 @@ public class Filosofo  extends Thread {
 
             }
         }
-        hacerAlgo();
     }
 
     public void pensar() throws InterruptedException {

@@ -42,6 +42,7 @@ public class Mesa {
     }
 
     public static boolean moderador(Filosofo temp) throws InterruptedException {
+        //CAMBIAR EL RETURN DE ESTE METODO A SOLO TRUE PARA DEADLOCK
         if(puedeComer==temp){
             return true;
         } else {

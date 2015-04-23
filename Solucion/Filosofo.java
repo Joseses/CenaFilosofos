@@ -12,7 +12,8 @@ public class Filosofo  extends Thread {
     int starvationLVL;
     int id;
     int timeMin = 0; //tiempo mínimo de aleatoriedad
-    int timeMax = 10; //tiempo máximo de aleatoriedad
+    int timeMax = 1; //tiempo máximo de aleatoriedad
+    Interface botones = Mesa.botones;
 
 
     //---------------------Constructores--------------------//
@@ -80,6 +81,7 @@ public class Filosofo  extends Thread {
         System.out.println(nombre + (id) + ": tengo hambre");
         boolean tengohambre = true;
         while (tengohambre) {
+			botones.colorboton('h', id);
             if (!derecho.isOcupado()&&Mesa.moderador(this)) {
                 derecho.setOcupador(id);
                 derecho.setOcupado(true);
@@ -101,25 +103,27 @@ public class Filosofo  extends Thread {
                 }
             } else {
                 isAlive();
-                if(derecho.ocupador==id) {
-                    derecho.setOcupador(-1);
-                    derecho.setOcupado(false);
-                }
-                if(izquierdo.ocupador==id) {
-                    izquierdo.setOcupador(-1);
-                    izquierdo.setOcupado(false);
-                }
+                //~ if(derecho.ocupador==id) {
+                    //~ derecho.setOcupador(-1);
+                    //~ derecho.setOcupado(false);
+                //~ }
+                //~ if(izquierdo.ocupador==id) {
+                    //~ izquierdo.setOcupador(-1);
+                    //~ izquierdo.setOcupado(false);
+                //~ }
 
             }
         }
     }
 
     public void pensar() throws InterruptedException {
+		botones.colorboton('p', id);
         System.out.println(nombre + (id) + ": estoy pensando...");
         sleep((int) (Math.random() * (timeMax - timeMin + 1) + timeMin));
     }
 
     public void comer() throws InterruptedException {
+		botones.colorboton('c', id);
         sleep((int) (Math.random() * (timeMax - timeMin + 1) + timeMin));
         derecho.setOcupador(-1);
         izquierdo.setOcupador(-1);

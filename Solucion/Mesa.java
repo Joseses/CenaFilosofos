@@ -10,6 +10,8 @@ public class Mesa {
 
     static Asiento cabeza = null;
     static Filosofo puedeComer = null;
+    static Filosofo puedeComer2 = null;
+    public static Interface botones = new Interface();
 
     public Mesa(int tam) {
         Asiento temp = new Asiento(); //Sector temporal
@@ -43,20 +45,23 @@ public class Mesa {
 
     public static boolean moderador(Filosofo temp) throws InterruptedException {
         //CAMBIAR EL RETURN DE ESTE METODO A SOLO TRUE PARA DEADLOCK
-        if(puedeComer==temp){
-            return true;
-        } else {
-            return false;
-        }
+        //~ if(puedeComer==temp||puedeComer2==temp){
+            //~ return true;
+        //~ } else {
+            //~ return false;
+        //~ }
+        return true;
     }
 
     public synchronized static void turnador(Asiento asiento) throws  InterruptedException{
-
+		Asiento temp = asiento.getDerecha().getDerecha();
         while(true){
             puedeComer=asiento.ocupador;
-            Thread.sleep(11);   //El tiempo en que el turnador duerme debe ser mayor o igual
+            puedeComer2=temp.ocupador;
+            Thread.sleep(10);   //El tiempo en que el turnador duerme debe ser mayor o igual
                                 //al tiempo en que los filofos comen...
             asiento = asiento.getDerecha();
+            temp = asiento.getDerecha();
         }
     }
 }
